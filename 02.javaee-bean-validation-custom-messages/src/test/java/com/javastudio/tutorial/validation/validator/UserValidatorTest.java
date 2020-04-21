@@ -13,6 +13,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 class UserValidatorTest {
@@ -42,14 +43,17 @@ class UserValidatorTest {
 
         // Show errors
         if (constraintViolations.size() > 0) {
-            constraintViolations.stream().map(ConstraintViolation::getMessage).forEach(LOGGER::info);
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(LOGGER::info);
         } else {
             LOGGER.info("Valid Object");
         }
 
         // Then
+        final List<String> options = Arrays.asList("Invalid Username", "Invalid Email");
         Assertions.assertThat(constraintViolations)
                 .extracting(ConstraintViolation::getMessage)
-                .contains("Invalid Username", "Invalid Email");
+                .containsAnyElementsOf(options);
     }
 }
